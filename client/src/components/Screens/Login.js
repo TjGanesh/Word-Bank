@@ -2,7 +2,8 @@ import React from "react";
 import Card from "../Bootstrap/Card";
 import FormGroup from "../Bootstrap/Forms/FormGroup";
 
-const Login = ({ onChange, onSubmit }) => {
+const Login = ({ onChange, onSubmit, Values }) => {
+  const onInputChange = () => {};
   return (
     <Card
       Header="Login"
@@ -10,20 +11,32 @@ const Login = ({ onChange, onSubmit }) => {
       Text="Please enter your username and password here to sign in to the system."
     >
       <form onChange={onChange} onSubmit={onSubmit}>
-        <FormGroup
-          ID="username"
-          Label="Username"
-          Type="text"
-          Placeholder="Please enter your username."
-          Desc="Please enter your username that you created during registration process."
-        />
-        <FormGroup
-          ID="password"
-          Label="Password"
-          Type="password"
-          Placeholder="Please enter your password."
-          Desc="Please enter your password that you created during registration process."
-        />
+        {Values.Error && (
+          <div className="alert alert-danger">{Values.Error}</div>
+        )}
+        {[
+          { Label: "LoginUsername", Type: "text" },
+          { Label: "LoginPassword", Type: "password" }
+        ].map((fg, key) => (
+          <FormGroup
+            key={key}
+            ID={fg.Label.toLowerCase()}
+            Label={fg.Label.replace("Login", "")}
+            Type={fg.Type}
+            Value={Values[fg.Label.toLowerCase()]}
+            Placeholder={
+              "Please enter your " +
+              fg.Label.replace("Login", "").toLowerCase() +
+              "."
+            }
+            onChange={onInputChange}
+            Desc={
+              "Please enter your " +
+              fg.Label.toLowerCase() +
+              " that you created during registration process."
+            }
+          />
+        ))}
         <button type="submit" className="btn btn-primary">
           Login
         </button>

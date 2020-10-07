@@ -2,7 +2,8 @@ import React from "react";
 import Card from "../Bootstrap/Card";
 import FormGroup from "../Bootstrap/Forms/FormGroup";
 
-const Register = ({ onChange, onSubmit }) => {
+const Register = ({ onChange, onSubmit, Values }) => {
+  const onInputChange = () => {};
   return (
     <Card
       Header="Register"
@@ -10,41 +11,68 @@ const Register = ({ onChange, onSubmit }) => {
       Text="Please register to access Word Bank and add new words to the system."
     >
       <form onChange={onChange} onSubmit={onSubmit}>
-        <FormGroup
-          ID="fullname"
-          Label="Your Name"
-          Type="text"
-          Placeholder="Please enter your full name."
-          Desc="Please enter your full name so that we can call you by that."
-        />
-        <FormGroup
-          ID="username"
-          Label="Username"
-          Type="text"
-          Placeholder="Please enter your username."
-          Desc="Please enter your username so that you can use for logging in."
-        />
-        <FormGroup
-          ID="password"
-          Label="Password"
-          Type="password"
-          Placeholder="Please enter your password."
-          Desc="Please enter your password so that you can use for logging in."
-        />
-        <FormGroup
-          ID="confpass"
-          Label="Confirm Password"
-          Type="password"
-          Placeholder="Please enter the same password as above."
-          Desc="Please enter your password again so that it makes your life tougher."
-        />
-        <FormGroup
-          ID="email"
-          Label="Email Address"
-          Type="email"
-          Placeholder="Please enter your email address."
-          Desc="Please enter your email address so we can send you spam."
-        />
+        {Values.Error && Values.Error.length > 0 && (
+          <div className="alert alert-danger">
+            <p>There are some errors preventing your sign up:</p>
+            <ul>
+              {Values.Error.map((err, key) => (
+                <li key={key}>{err}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {[
+          {
+            ID: "fullname",
+            Label: "Your Name",
+            Placeholder: "Please enter your full name.",
+            Type: "text",
+            Desc:
+              "Please enter your full name so that we can call you by that.",
+            DontShow: true
+          },
+          {
+            ID: "username",
+            Label: "Username",
+            Placeholder: "Please enter your username.",
+            Type: "text",
+            Desc:
+              "Please enter your username so that you can use for logging in."
+          },
+          {
+            ID: "password",
+            Label: "Password",
+            Placeholder: "Please enter your password.",
+            Type: "password",
+            Desc:
+              "Please enter your password so that you can use for logging in."
+          },
+          {
+            ID: "confpass",
+            Label: "Confirm Password",
+            Placeholder: "Please enter the same password as above.",
+            Type: "password",
+            Desc:
+              "Please enter your password again so that it makes your life tougher."
+          },
+          {
+            ID: "email",
+            Label: "Email Address",
+            Placeholder: "Please enter your email address.",
+            Type: "email",
+            Desc: "Please enter your email address so we can send you spam.",
+            DontShow: true
+          }
+        ]
+          .filter(fg => !fg.DontShow)
+          .map((fg, key) => (
+            <FormGroup
+              key={key}
+              {...fg}
+              onChange={onInputChange}
+              Value={Values[fg.ID]}
+            />
+          ))}
         <button type="submit" className="btn btn-primary">
           Register
         </button>
